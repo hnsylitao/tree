@@ -1,5 +1,5 @@
 {
-  "name": "rc-tree",
+  "name": "repair-rc-tree",
   "version": "3.3.0",
   "description": "tree ui component for react",
   "engines": {
