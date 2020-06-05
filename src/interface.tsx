@@ -12,7 +12,9 @@ export interface DataNode {
   title?: React.ReactNode;
   selectable?: boolean;
   switcherIcon?: IconType;
-
+  draggable?: boolean;
+  startDraggable?: boolean;
+  enterDraggable?: boolean;
   /** Set style of TreeNode. This is not recommend if you don't have any force requirement */
   className?: string;
   style?: React.CSSProperties;

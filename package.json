@@ -1,6 +1,6 @@
 {
   "name": "repair-rc-tree",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "description": "tree ui component for react",
   "engines": {
     "node": ">=8.x"
@@ -20,14 +20,14 @@
     "es",
     "lib"
   ],
-  "homepage": "http://github.com/react-component/tree",
+  "homepage": "http://github.com/hnsylitao/tree",
   "author": "smith3816@gmail.com",
   "repository": {
     "type": "git",
-    "url": "git@github.com:react-component/tree.git"
+    "url": "git@github.com:hnsylitao/tree.git"
   },
   "bugs": {
-    "url": "http://github.com/react-component/tree/issues"
+    "url": "http://github.com/hnsylitao/tree/issues"
   },
   "license": "MIT",
   "main": "./lib/index",

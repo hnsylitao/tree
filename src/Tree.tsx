@@ -129,6 +129,13 @@ export interface TreeProps {
     dropPosition: number;
     dropToGap: boolean;
   }) => void;
+
+  checkDraggableStart?: (info: { event: React.MouseEvent; node: EventDataNode }) => boolean;
+  checkDraggableEnter?: (info: {
+    event: React.MouseEvent;
+    node: EventDataNode;
+    dragNode: EventDataNode;
+  }) => boolean;
   /**
    * Used for `rc-tree-select` only.
    * Do not use in your production code directly since this will be refactor.
@@ -340,8 +347,14 @@ class Tree extends React.Component<TreeProps, TreeState> {
 
   onNodeDragStart = (event: React.MouseEvent<HTMLDivElement>, node: NodeInstance) => {
     const { expandedKeys, keyEntities } = this.state;
-    const { onDragStart } = this.props;
+    const { onDragStart, checkDraggableStart } = this.props;
     const { eventKey } = node.props;
+
+    if (
+      checkDraggableStart &&
+      checkDraggableStart({ event, node: convertNodePropsToEventData(node.props) })
+    )
+      return;
 
     this.dragNode = node;
 
@@ -368,8 +381,18 @@ class Tree extends React.Component<TreeProps, TreeState> {
    */
   onNodeDragEnter = (event: React.MouseEvent<HTMLDivElement>, node: NodeInstance) => {
     const { expandedKeys, keyEntities, dragNodesKeys } = this.state;
-    const { onDragEnter } = this.props;
+    const { onDragEnter, checkDraggableEnter } = this.props;
     const { pos, eventKey } = node.props;
+
+    if (
+      checkDraggableEnter &&
+      checkDraggableEnter({
+        event,
+        node: convertNodePropsToEventData(node.props),
+        dragNode: this.dragNode ? convertNodePropsToEventData(this.dragNode.props) : null,
+      })
+    )
+      return;
 
     if (!this.dragNode || dragNodesKeys.indexOf(eventKey) !== -1) return;
 
