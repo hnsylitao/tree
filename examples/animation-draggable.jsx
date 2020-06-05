@@ -122,7 +122,6 @@ class Demo extends React.Component {
 
   render() {
     const { expandedKeys } = this.state;
-
     return (
       <div className="draggable-demo">
         <style dangerouslySetInnerHTML={{ __html: STYLE }} />
@@ -130,12 +129,15 @@ class Demo extends React.Component {
         <h2>draggable</h2>
         <p>drag a node into another node</p>
         <Tree
-          expandedKeys={expandedKeys}
-          onExpand={this.onExpand}
-          autoExpandParent={this.state.autoExpandParent}
+          //   expandedKeys={expandedKeys}
+          //   onExpand={this.onExpand}
+          //   autoExpandParent={this.state.autoExpandParent}
           draggable
-          onDragStart={this.onDragStart}
-          onDragEnter={this.onDragEnter}
+          height={400}
+          defaultExpandAll
+          //   autoExpandParent
+          //   onDragStart={this.onDragStart}
+          //   onDragEnter={this.onDragEnter}
           onDrop={this.onDrop}
           treeData={this.state.gData}
           motion={motion}

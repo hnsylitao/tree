@@ -412,8 +412,10 @@ class Tree extends React.Component<TreeProps, TreeState> {
         dragOverGapTop: dropPosition === -1,
         dragOverGapBottom: dropPosition === 1,
       })
-    )
+    ) {
+      this.dragNode = null;
       return;
+    }
 
     // Skip if drag node is self
     if (this.dragNode.props.eventKey === eventKey && dropPosition === 0) {

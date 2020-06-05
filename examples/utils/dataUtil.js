@@ -1,6 +1,6 @@
 /* eslint-disable no-loop-func, no-mixed-operators, no-console, no-plusplus, no-underscore-dangle */
 
-export function generateData(x = 3, y = 2, z = 1, gData = []) {
+export function generateData(x = 10, y = 3, z = 4, gData = []) {
   // x：每一级下的节点总数。y：每级节点里有y个节点、存在子节点。z：树的level层级数（0表示一级）
   function _loop(_level, _preKey, _tns) {
     const preKey = _preKey || '0';
@@ -28,7 +28,7 @@ export function generateData(x = 3, y = 2, z = 1, gData = []) {
   _loop(z);
   return gData;
 }
-export function calcTotal(x = 3, y = 2, z = 1) {
+export function calcTotal(x = 10, y = 3, z = 4) {
   /* eslint no-param-reassign:0 */
   const rec = n => (n >= 0 ? x * y ** n-- + rec(n) : 0);
   return rec(z + 1);
