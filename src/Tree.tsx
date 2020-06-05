@@ -525,6 +525,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     const { dragNodesKeys = [], dropPosition } = this.state;
     const { onDrop } = this.props;
     const { eventKey, pos } = node.props;
+    if (!this.dragNode) return;
 
     this.setState({
       dragOverNodeKey: '',
