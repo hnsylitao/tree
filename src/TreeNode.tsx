@@ -280,7 +280,7 @@ class InternalTreeNode extends React.Component<InternalTreeNodeProps, TreeNodeSt
       context: { draggable: treeDraggable },
     } = this.props;
 
-    return !!(treeDraggable || draggable);
+    return typeof draggable === 'boolean' ? draggable : treeDraggable;
   };
 
   isStartDraggable = () => {
@@ -460,10 +460,10 @@ class InternalTreeNode extends React.Component<InternalTreeNodeProps, TreeNodeSt
           `${wrapClass}`,
           `${wrapClass}-${this.getNodeState() || 'normal'}`,
           !disabled && (selected || dragNodeHighlight) && `${prefixCls}-node-selected`,
-          !disabled && draggable && 'draggable',
+          !disabled && draggable && startDraggable && 'draggable',
         )}
-        draggable={(!disabled && draggable) || undefined}
-        aria-grabbed={(!disabled && draggable) || undefined}
+        draggable={(!disabled && draggable && startDraggable) || undefined}
+        aria-grabbed={(!disabled && draggable && startDraggable) || undefined}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onContextMenu={this.onContextMenu}
@@ -529,7 +529,7 @@ class InternalTreeNode extends React.Component<InternalTreeNodeProps, TreeNodeSt
         onDragOver={draggable && enterDraggable ? this.onDragOver : undefined}
         onDragLeave={draggable && enterDraggable ? this.onDragLeave : undefined}
         onDrop={draggable && enterDraggable ? this.onDrop : undefined}
-        onDragEnd={draggable ? this.onDragEnd : undefined}
+        onDragEnd={draggable && enterDraggable ? this.onDragEnd : undefined}
         onMouseMove={onMouseMove}
         {...dataOrAriaAttributeProps}
       >

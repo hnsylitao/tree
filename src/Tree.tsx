@@ -128,6 +128,9 @@ export interface TreeProps {
     dragNodesKeys: Key[];
     dropPosition: number;
     dropToGap: boolean;
+    dragOver: boolean;
+    dragOverGapTop: boolean;
+    dragOverGapBottom: boolean;
   }) => void;
 
   checkDraggableStart?: (info: { event: React.MouseEvent; node: EventDataNode }) => boolean;
@@ -135,6 +138,12 @@ export interface TreeProps {
     event: React.MouseEvent;
     node: EventDataNode;
     dragNode: EventDataNode;
+    dragNodesKeys: Key[];
+    dropPosition: number;
+    dropToGap: boolean;
+    dragOver: boolean;
+    dragOverGapTop: boolean;
+    dragOverGapBottom: boolean;
   }) => boolean;
   /**
    * Used for `rc-tree-select` only.
@@ -380,9 +389,15 @@ class Tree extends React.Component<TreeProps, TreeState> {
    * But let's just keep it to avoid event trigger logic change.
    */
   onNodeDragEnter = (event: React.MouseEvent<HTMLDivElement>, node: NodeInstance) => {
-    const { expandedKeys, keyEntities, dragNodesKeys } = this.state;
+    const { expandedKeys, keyEntities, dragNodesKeys = [] } = this.state;
     const { onDragEnter, checkDraggableEnter } = this.props;
     const { pos, eventKey } = node.props;
+
+    if (!this.dragNode || dragNodesKeys.indexOf(eventKey) !== -1) return;
+
+    const dropPosition = calcDropPosition(event, node);
+
+    const posArr = posToArr(pos);
 
     if (
       checkDraggableEnter &&
@@ -390,13 +405,15 @@ class Tree extends React.Component<TreeProps, TreeState> {
         event,
         node: convertNodePropsToEventData(node.props),
         dragNode: this.dragNode ? convertNodePropsToEventData(this.dragNode.props) : null,
+        dragNodesKeys: dragNodesKeys.slice(),
+        dropPosition: dropPosition + Number(posArr[posArr.length - 1]),
+        dropToGap: dropPosition !== 0,
+        dragOver: dropPosition === 0,
+        dragOverGapTop: dropPosition === -1,
+        dragOverGapBottom: dropPosition === 1,
       })
     )
       return;
-
-    if (!this.dragNode || dragNodesKeys.indexOf(eventKey) !== -1) return;
-
-    const dropPosition = calcDropPosition(event, node);
 
     // Skip if drag node is self
     if (this.dragNode.props.eventKey === eventKey && dropPosition === 0) {
@@ -525,12 +542,11 @@ class Tree extends React.Component<TreeProps, TreeState> {
       dragNode: this.dragNode ? convertNodePropsToEventData(this.dragNode.props) : null,
       dragNodesKeys: dragNodesKeys.slice(),
       dropPosition: dropPosition + Number(posArr[posArr.length - 1]),
-      dropToGap: false,
+      dropToGap: dropPosition !== 0,
+      dragOver: dropPosition === 0,
+      dragOverGapTop: dropPosition === -1,
+      dragOverGapBottom: dropPosition === 1,
     };
-
-    if (dropPosition !== 0) {
-      dropResult.dropToGap = true;
-    }
 
     if (onDrop) {
       onDrop(dropResult);
