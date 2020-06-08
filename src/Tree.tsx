@@ -237,6 +237,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
   };
 
   dragNode: NodeInstance;
+  dragCheck: boolean = true;
 
   listRef = React.createRef<NodeListRef>();
 
@@ -422,9 +423,10 @@ class Tree extends React.Component<TreeProps, TreeState> {
         dragOverGapBottom: dropPosition === 1,
       })
     ) {
-      this.dragNode = null;
+      this.dragCheck = false;
       return;
     }
+    this.dragCheck = true;
 
     // Ref: https://github.com/react-component/tree/issues/132
     // Add timeout to let onDragLevel fire before onDragEnter,
@@ -500,9 +502,10 @@ class Tree extends React.Component<TreeProps, TreeState> {
           dragOverGapBottom: dropPosition === 1,
         })
       ) {
-        this.dragNode = null;
+        this.dragCheck = false;
         return;
       }
+      this.dragCheck = true;
 
       this.setState({
         dropPosition,
@@ -544,7 +547,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     const { dragNodesKeys = [], dropPosition } = this.state;
     const { onDrop } = this.props;
     const { eventKey, pos } = node.props;
-    if (!this.dragNode) return;
+    if (!this.dragNode || !this.dragCheck) return;
 
     this.setState({
       dragOverNodeKey: '',
