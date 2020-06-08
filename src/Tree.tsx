@@ -399,9 +399,18 @@ class Tree extends React.Component<TreeProps, TreeState> {
 
     const posArr = posToArr(pos);
 
+    // Skip if drag node is self
+    if (this.dragNode.props.eventKey === eventKey && dropPosition === 0) {
+      this.setState({
+        dragOverNodeKey: '',
+        dropPosition: null,
+      });
+      return;
+    }
+
     if (
       checkDraggableEnter &&
-      checkDraggableEnter({
+      !checkDraggableEnter({
         event,
         node: convertNodePropsToEventData(node.props),
         dragNode: this.dragNode ? convertNodePropsToEventData(this.dragNode.props) : null,
@@ -414,15 +423,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
       })
     ) {
       this.dragNode = null;
-      return;
-    }
-
-    // Skip if drag node is self
-    if (this.dragNode.props.eventKey === eventKey && dropPosition === 0) {
-      this.setState({
-        dragOverNodeKey: '',
-        dropPosition: null,
-      });
       return;
     }
 
@@ -472,8 +472,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
 
   onNodeDragOver = (event: React.MouseEvent<HTMLDivElement>, node: NodeInstance) => {
     const { dragNodesKeys } = this.state;
-    const { onDragOver } = this.props;
-    const { eventKey } = node.props;
+    const { onDragOver, checkDraggableEnter } = this.props;
+    const { pos, eventKey } = node.props;
 
     if (dragNodesKeys.indexOf(eventKey) !== -1) {
       return;
@@ -484,6 +484,25 @@ class Tree extends React.Component<TreeProps, TreeState> {
       const dropPosition = calcDropPosition(event, node);
 
       if (dropPosition === this.state.dropPosition) return;
+
+      const posArr = posToArr(pos);
+      if (
+        checkDraggableEnter &&
+        !checkDraggableEnter({
+          event,
+          node: convertNodePropsToEventData(node.props),
+          dragNode: this.dragNode ? convertNodePropsToEventData(this.dragNode.props) : null,
+          dragNodesKeys: dragNodesKeys.slice(),
+          dropPosition: dropPosition + Number(posArr[posArr.length - 1]),
+          dropToGap: dropPosition !== 0,
+          dragOver: dropPosition === 0,
+          dragOverGapTop: dropPosition === -1,
+          dragOverGapBottom: dropPosition === 1,
+        })
+      ) {
+        this.dragNode = null;
+        return;
+      }
 
       this.setState({
         dropPosition,
