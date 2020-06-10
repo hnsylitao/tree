@@ -424,6 +424,10 @@ class Tree extends React.Component<TreeProps, TreeState> {
       })
     ) {
       this.dragCheck = false;
+      // fix Drop
+      this.setState({
+        dragOverNodeKey: eventKey,
+      });
       return;
     }
     this.dragCheck = true;
@@ -437,7 +441,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
       // Update drag over node
       this.setState({
         dragOverNodeKey: eventKey,
-        dropPosition,
+        // fix Drop
+        // dropPosition,
       });
 
       // Side effect for delay drag
@@ -485,7 +490,8 @@ class Tree extends React.Component<TreeProps, TreeState> {
     if (this.dragNode && eventKey === this.state.dragOverNodeKey) {
       const dropPosition = calcDropPosition(event, node);
 
-      if (dropPosition === this.state.dropPosition) return;
+      // fix Drop
+      // if (dropPosition === this.state.dropPosition) return;
 
       const posArr = posToArr(pos);
       if (
