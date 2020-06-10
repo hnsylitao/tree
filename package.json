@@ -1,6 +1,6 @@
 {
   "name": "repair-rc-tree",
-  "version": "3.3.9",
+  "version": "3.3.10",
   "description": "tree ui component for react",
   "engines": {
     "node": ">=8.x"

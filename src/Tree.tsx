@@ -424,10 +424,12 @@ class Tree extends React.Component<TreeProps, TreeState> {
       })
     ) {
       this.dragCheck = false;
-      // fix Drop
-      this.setState({
-        dragOverNodeKey: eventKey,
-      });
+      setTimeout(() => {
+        this.setState({
+          dragOverNodeKey: eventKey,
+          // fix Drop
+        });
+      }, 0);
       return;
     }
     this.dragCheck = true;
